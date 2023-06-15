@@ -73,8 +73,7 @@ class App(ctk.CTk):
         self.second_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.second_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
 
-        self.second_frame_label = ctk.CTkLabel(self.second_frame,
-                                                         text="WELCOME!\n")
+        self.second_frame_label = ctk.CTkLabel(self.second_frame, text="Deterministic Finite Automata (DFA)\n")
         self.second_frame_label.pack_configure(padx = 20, pady = 30)
 
         # Set initial value for combobox
@@ -148,8 +147,7 @@ class App(ctk.CTk):
         self.third_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.third_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
 
-        self.third_frame_label = ctk.CTkLabel(self.third_frame,
-                                                         text="WELCOME!\n")
+        self.third_frame_label = ctk.CTkLabel(self.third_frame, text="Context-Free Grammar (CFG)\n")
         self.third_frame_label.pack_configure(padx = 20, pady = 30)
 
         # Set initial value for combobox
@@ -188,8 +186,7 @@ class App(ctk.CTk):
         self.fourth_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.fourth_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
 
-        self.fourth_frame_label = ctk.CTkLabel(self.fourth_frame,
-                                                         text="WELCOME!\n")
+        self.fourth_frame_label = ctk.CTkLabel(self.fourth_frame, text="Pushdown Automata (PDA)\n")
         self.fourth_frame_label.pack_configure(padx = 20, pady = 30)
 
         # Set initial value for combobox
