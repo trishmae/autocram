@@ -1,7 +1,8 @@
 # DFA 1 Animation
 
 import customtkinter as ctk
-
+import re
+from string_validation import*
 def draw_dfa1(self):
     self.state_coords = [
         (70, 120, 120, 170), (170, 60, 220, 110), (170, 195, 220, 245), (260, 120, 310, 170),
@@ -83,7 +84,7 @@ def animate_dfa1(self, input_string):
         7: {'a': 8, 'b': 7},
         8: {'a': 9, 'b': 10},
         9: {'a': 10, 'b': 11},
-        10: {'a': 11, 'b': 9},
+        10: {'a': 11, 'b':9},  # 9-11
         11: {'a': 12, 'b': 11},
         12: {'a': 12, 'b': 11}
     }
@@ -114,7 +115,7 @@ def animate_dfa1(self, input_string):
     self.dfa_container.itemconfigure(self.states[current_state], fill='white')
 
     # Check if the final state is accepting or not
-    if current_state == 12:
+    if re.match(pattern1, input_string):
         self.dfa_container.itemconfigure(self.states[current_state], fill='green')
         self.valid_label.configure(text="Accepted")
     else:

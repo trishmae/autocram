@@ -2,6 +2,9 @@
 
 import customtkinter as ctk
 
+import re
+from string_validation import*
+
 def draw_dfa2(self):
     self.state_coords = [
         (70, 120, 120, 170), (170, 50, 220, 100), (170, 195, 220, 245), (170, 120, 220, 170),
@@ -83,7 +86,7 @@ def draw_dfa2(self):
 #     self.animate_dfa(input_string)
 
 def animate_dfa2(self, input_string):
-    draw_dfa2(self)
+    draw_dfa2(self)  # Draw the DFA
 
     current_state = 0  # Start from the initial state
 
@@ -103,7 +106,6 @@ def animate_dfa2(self, input_string):
         12: {'1': 14, '0': 14},
         13: {'1': 13, '0': 13},
         14: {'1': 14, '0': 14}
-
     }
 
     for char in input_string:
@@ -119,8 +121,7 @@ def animate_dfa2(self, input_string):
         next_state = transitions[current_state].get(char)
         if next_state is None:
             print(f"Rejected: No transition for input '{char}' from state {current_state}")
-            return
-
+            next_state = 3  # Go to trapstate if invalid transition
         current_state = next_state
 
     # Highlight the final state
@@ -132,7 +133,7 @@ def animate_dfa2(self, input_string):
     self.dfa_container.itemconfigure(self.states[current_state], fill='white')
 
     # Check if the final state is accepting or not
-    if current_state == 12:
+    if re.match(pattern2, input_string):
         self.dfa_container.itemconfigure(self.states[current_state], fill='green')
         self.valid_label.configure(text="Accepted")
     else:

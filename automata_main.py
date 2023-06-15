@@ -1,6 +1,6 @@
 # Automata Main
 
-from tkinter import Widget
+from tkinter import Widget, PhotoImage, Canvas
 import customtkinter as ctk
 import re
 from customtkinter import CTkEntry, StringVar, CTkButton
@@ -15,7 +15,7 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Automata Project")
-        self.geometry("1080x700")
+        self.geometry("1300x650")
         self.resizable(True, True)
 
         # Create Navigation Frame
@@ -146,9 +146,83 @@ class App(ctk.CTk):
 
         # Create Third Frame: CFG
         self.third_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.third_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
+
+        self.third_frame_label = ctk.CTkLabel(self.third_frame,
+                                                         text="WELCOME!\n")
+        self.third_frame_label.pack_configure(padx = 20, pady = 30)
+
+        # Set initial value for combobox
+        regex = ctk.StringVar(value="RegEx 1")
+
+        # CFG Pictures
+        self.cfg1 = PhotoImage(file="CFG1.png")
+        self.cfg2 = PhotoImage(file="CFG2.png")
+
+        def display_cfg(choice):
+            if choice == "RegEx 1":
+                text = "(a+b) (a+b)* (aa+bb) (ab+ba) (a+b)* (aba+baa)"
+                self.cfg_container.delete("all")  # Clear the canvas
+                cfg = self.cfg_container.create_image(200, 200, image=self.cfg1)
+            elif choice == "RegEx 2":
+                text = "(11+00) (1+0)* (101+111+01) (00*+11*) (1+0+11)"
+                self.cfg_container.delete("all")  # Clear the canvas
+                cfg = self.cfg_container.create_image(200, 200, image=self.cfg2)
+            self.strings_label3.configure(text=text)
+            self.cfg_container.pack_configure(cfg)
+            return text
+
+        # CFG Container
+        self.combobox3 = ctk.CTkComboBox(self.third_frame, values=["RegEx 1", "RegEx 2"], command=display_cfg, variable=regex)
+        self.combobox3.pack_configure(padx = 20, pady = 10)
+
+        # Label that will display the chosen Regex
+        self.strings_label3 = ctk.CTkLabel(self.third_frame, text="")
+        self.strings_label3.configure(font=(None, 20))
+        self.strings_label3.pack(padx = 20, pady = 20)
+
+        self.cfg_container = ctk.CTkCanvas(self.third_frame, width=400, height=400)
+        self.cfg_container.pack_configure(side = 'top', padx = 50, pady = 10, anchor = 's')
 
         # Create Fourth Frame: PDA
         self.fourth_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.fourth_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
+
+        self.fourth_frame_label = ctk.CTkLabel(self.fourth_frame,
+                                                         text="WELCOME!\n")
+        self.fourth_frame_label.pack_configure(padx = 20, pady = 30)
+
+        # Set initial value for combobox
+        regex = ctk.StringVar(value="RegEx 1")
+
+        # PDA pictures
+        self.pda1 = PhotoImage(file="PDA1.png")
+        self.pda2 = PhotoImage(file="PDA2.png")
+
+        def display_pda(choice):
+            if choice == "RegEx 1":
+                text = "(a+b) (a+b)* (aa+bb) (ab+ba) (a+b)* (aba+baa)"
+                self.pda_container.delete("all")  # Clear the canvas
+                pda = self.pda_container.create_image(610, 200, image=self.pda1)
+            elif choice == "RegEx 2":
+                text = "(11+00) (1+0)* (101+111+01) (00*+11*) (1+0+11)"
+                self.pda_container.delete("all")  # Clear the canvas
+                pda = self.pda_container.create_image(450, 200, image=self.pda2)
+            self.strings_label4.configure(text=text)
+            self.pda_container.pack_configure(pda)
+            return text
+
+        self.combobox4 = ctk.CTkComboBox(self.fourth_frame, values=["RegEx 1", "RegEx 2"], command=display_pda, variable=regex)
+        self.combobox4.pack_configure(padx = 20, pady = 10)
+
+        # Label that will display the chosen Regex
+        self.strings_label4 = ctk.CTkLabel(self.fourth_frame, text="")
+        self.strings_label4.configure(font=(None, 20))
+        self.strings_label4.pack(padx = 20, pady = 20)
+
+        # PDA Container
+        self.pda_container = ctk.CTkCanvas(self.fourth_frame, width=1220, height=400)
+        self.pda_container.pack_configure(side = 'top', padx = 50, pady = 10, anchor = 's')
 
         # Select default frame
         self.select_frame_by_name("home")
