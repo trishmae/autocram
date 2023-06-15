@@ -5,7 +5,7 @@ import re
 from customtkinter import CTkEntry, StringVar, CTkButton
 from string_validation import *
 from dfa1_illustration import *
-from navigation_frames import *
+from scratch.navigation_frames import *
 
 class App(ctk.CTk):
     def __init__(self):

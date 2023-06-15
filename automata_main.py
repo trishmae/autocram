@@ -1,12 +1,14 @@
 # Automata Main
 
+from tkinter import Widget
 import customtkinter as ctk
 import re
 from customtkinter import CTkEntry, StringVar, CTkButton
 from string_validation import *
-from dfa1_illustration import *
-from dfa2_illustration import *
-# from navigation_frames import *
+# from dfa1_illustration import *
+# from dfa2_illustration import *
+from dfa1_animation import *
+from dfa2_animation import *
 
 class App(ctk.CTk):
     def __init__(self):
@@ -58,66 +60,18 @@ class App(ctk.CTk):
                                                                 command=self.change_appearance_mode_event)
         self.appearance_mode_menu.pack(side = 'bottom', padx = 20, pady = 20, ipadx = 5, ipady = 0, anchor = 's')
 
-        # Create Home Frame
+        # Create Home Frame: User Manual
         self.home_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
 
-        # Welcome Label
-        self.welcome_label = ctk.CTkLabel(self.home_frame, text="WELCOME!\nChoose a regular expression to get started.")
+        # User Manual Label
+        self.welcome_label = ctk.CTkLabel(self.home_frame, text="User Manual")
         self.welcome_label.configure(font=(None, 25))
         self.welcome_label.pack_configure(padx = 20, pady = 30)
 
-        # Set initial value for combobox
-        regex = ctk.StringVar(value="RegEx 1")
-
-        def combobox_callback(choice):
-            print("combobox dropdown clicked:", choice)
-            if (choice == "RegEx 1"):
-                text = "(a+b) (a+b)* (aa+bb) (ab+ba) (a+b)* (aba+baa)"
-            if (choice == "RegEx 2"):
-                text = "(11+00) (1+0)* (101+111+01) (00*+11*) (1+0+11)"
-            self.strings_label.configure(text=text)
-            print(text)
-            return text
-
-        self.combobox = ctk.CTkComboBox(self.home_frame, values=["RegEx 1", "RegEx 2"], command=combobox_callback, variable=regex)
-        self.combobox.pack_configure(padx = 20, pady = 10)
-
-        self.strings_label = ctk.CTkLabel(self.home_frame, text="")
-        self.strings_label.configure(font=(None, 20))
-        self.strings_label.pack(padx = 20, pady = 20)
-
-        self.entry = ctk.CTkEntry(self.home_frame, width = 400, placeholder_text="Enter String")
-        self.entry.configure(font=(None, 15))
-        self.entry.pack_configure(side = 'left', padx = 20, pady = 20, anchor = 'center')
-
-        def validate_string():
-            if (self.combobox.get() == "RegEx 1"):
-                pattern = r"^[ab](?:[ab])*(?:aa|bb)(?:ab|ba)(?:[ab])*?(?:aba|baa)$"
-            if (self.combobox.get() == "RegEx 2"):
-                pattern = r"^(?:11|00)(?:1|0)*(?:101|111|01)(?:00*|11*)(?:1|0|11)$"
-            result = validateString(pattern, self.entry.get())
-            self.valid_label.configure(text=result)
-            print(result)
-            return result
-            # validateString(pattern2, self.entry)
-            # self.btn.configure(text=self.entry.get())
-
-        self.btnValidateString = CTkButton(self.home_frame, text="Validate String", command=validate_string)
-        self.btnValidateString.pack_configure(side = 'left', padx = 0, pady = 0, anchor = 'center')
-
-        self.valid_label = ctk.CTkLabel(self.home_frame, text="")
-        self.valid_label.pack_configure(side = 'left', padx = 20, pady = 30, anchor = 'center')
-
-        # self.valid_label = ctk.CTkLabel(self.home_frame, text="string")
-        # self.valid_label.pack(side = 'left', padx = 0, pady = 0, anchor = 'center')
-        # self.valid_label.grid(row=0, column=1, padx=70, pady=200, sticky="s")
-
-        # create second frame
+        # Create Second Frame: DFA
         self.second_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.second_frame.pack_configure(padx = 0, pady = 0, anchor = 'center')
-        # self.second_frame.grid_columnconfigure(0, weight=1)
-        # self.second_frame.pack()
 
         self.second_frame_label = ctk.CTkLabel(self.second_frame,
                                                          text="WELCOME!\n")
@@ -126,40 +80,15 @@ class App(ctk.CTk):
         # Set initial value for combobox
         regex = ctk.StringVar(value="RegEx 1")
 
-        # def string_select(choice):
-        #     print("combobox dropdown clicked:", choice)
-        #     if (choice == "RegEx 1"):
-        #         text = "(a+b) (a+b)* (aa+bb) (ab+ba) (a+b)* (aba+baa)"
-        #         draw_dfa1(self).pack()
-        #         # draw_dfa2(self).pack_forget()
-        #     # else:
-        #     #     draw_dfa1(self).pack_forget()
-        #     if (choice == "RegEx 2"):
-        #         text = "(11+00) (1+0)* (101+111+01) (00*+11*) (1+0+11)"
-        #         draw_dfa2(self).pack()
-        #         # draw_dfa1(self).pack_forget()
-        #     else:
-        #         draw_dfa1(self).pack_forget() 
-        #         draw_dfa2(self).pack_forget()              
-        #     # else:
-        #     #     draw_dfa2(self).pack_forget()
-        #     self.strings_label2.configure(text=text)
-        #     print(text)
-        #     return text
-        
         def string_select(choice):
-            if (choice == "RegEx 1"):
+            if choice == "RegEx 1":
                 text = "(a+b) (a+b)* (aa+bb) (ab+ba) (a+b)* (aba+baa)"
-                # draw_dfa2(self).pack_forget()  # Hide draw_dfa2 if it was displayed
-                # draw_dfa2(self).clear()
+                self.dfa_container.delete("all")  # Clear the canvas
                 draw = draw_dfa1(self)  # Display draw_dfa1
-                # draw_dfa2(self).forget()
-            elif (choice == "RegEx 2"):
+            elif choice == "RegEx 2":
                 text = "(11+00) (1+0)* (101+111+01) (00*+11*) (1+0+11)"
-                # draw_dfa1(self).clear()
-                # draw_dfa1(self).forget()  # Hide draw_dfa1 if it was displayed
-                draw = draw_dfa2(self) # Display draw_dfa2
-                # draw_dfa1(self).forget()
+                self.dfa_container.delete("all")  # Clear the canvas
+                draw = draw_dfa2(self)  # Display draw_dfa2
             self.strings_label2.configure(text=text)
             self.dfa_container.pack_configure(draw)
             return text
@@ -167,33 +96,61 @@ class App(ctk.CTk):
         self.combobox2 = ctk.CTkComboBox(self.second_frame, values=["RegEx 1", "RegEx 2"], command=string_select, variable=regex)
         self.combobox2.pack_configure(padx = 20, pady = 10)
 
+        # Label that will display the chosen Regex
         self.strings_label2 = ctk.CTkLabel(self.second_frame, text="")
         self.strings_label2.configure(font=(None, 20))
         self.strings_label2.pack(padx = 20, pady = 20)
 
+        # DFA Container
         self.dfa_container = ctk.CTkCanvas(self.second_frame, width=2000, height=300)
-        self.dfa_container.pack_configure(side = 'top', padx = 50, pady = 100, anchor = 's')
-        # dfa_visual
-        # draw_dfa().pack
+        self.dfa_container.pack_configure(side = 'top', padx = 50, pady = 10, anchor = 's')
 
-        def draw_dfa():
+        # Entry Widget where user enters a string to validate
+        self.entry = ctk.CTkEntry(self.second_frame, width=400, placeholder_text="Enter String")
+        self.entry.configure(font=(None, 15))
+        self.entry.pack_configure(side='top', padx=20, pady=20, anchor='center')
+
+        # Function to validate a string
+        def validate_string():
             if (self.combobox2.get() == "RegEx 1"):
-                return draw_dfa1(self)
+                pattern = r"^[ab](?:[ab])*(?:aa|bb)(?:ab|ba)(?:[ab])*?(?:aba|baa)$"
             if (self.combobox2.get() == "RegEx 2"):
-                return draw_dfa2(self)
-            # self.strings_label.configure(text=text)
-            # print(text)
-            # return text
+                pattern = r"^(?:11|00)(?:1|0)*(?:101|111|01)(?:00*|11*)(?:1|0|11)$"
+            result = validateString(pattern, self.entry.get())
+            self.valid_label.configure(text=result)
+            print(result)
+            return result
+        
+        # Function to animate a string
+        def animate_string():
+            if (self.combobox2.get() == "RegEx 1"):
+                self.dfa_container.delete("all")
+                ani = animate_dfa1(self, self.entry.get())
+            elif (self.combobox2.get() == "RegEx 2"):
+                self.dfa_container.delete("all")
+                ani = animate_dfa2(self, self.entry.get())
+            # self.dfa_container.delete("all")  # Clear the canvas
+            self.dfa_container.pack_configure(ani)
 
-        # draw_dfa1(self)
+        # Button to validate string
+        self.btnValidateString = CTkButton(self.second_frame, text="Validate String", command=validate_string)
+        self.btnValidateString.pack_configure(side='top', padx=0, pady=0, anchor='center')
+        
+        # Label that will indicate 'Valid String' or 'Invalid String'
+        self.valid_label = ctk.CTkLabel(self.second_frame, text="")
+        self.valid_label.pack_configure(side='top', padx=0, pady=0, anchor='center')
 
-        # create third frame
+        # Button to animate string
+        self.btnValidateString = CTkButton(self.second_frame, text="Animate String", command=animate_string)
+        self.btnValidateString.pack_configure(side='top', padx=0, pady=0, anchor='center')
+
+        # Create Third Frame: CFG
         self.third_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        # create fourth frame
+        # Create Fourth Frame: PDA
         self.fourth_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        # select default frame
+        # Select default frame
         self.select_frame_by_name("home")
 
     def select_frame_by_name(self, name):
@@ -206,22 +163,18 @@ class App(ctk.CTk):
         # show selected frame
         if name == "home":
             self.home_frame.pack()
-            # self.home_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.home_frame.pack_forget()
         if name == "frame_2":
             self.second_frame.pack()
-            # self.second_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.second_frame.pack_forget()
         if name == "frame_3":
             self.third_frame.pack()
-            # self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.pack_forget()
         if name == "frame_4":
             self.fourth_frame.pack()
-            # self.fourth_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.fourth_frame.pack_forget()
 
